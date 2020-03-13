@@ -1,7 +1,10 @@
-import CVAE.utils
+import sys
+sys.path.append("../")
+import utils
+
+from keras.layers.advanced_activations import LeakyReLU
 
 class CVAE():
-
     #def __init__(self,) ではインスタンス変数を定義する。(インスタンス変数はインスタンス間で共有されることはない)
     def __init__(self, original_dim,label_dim,first_hidden_dim,second_hidden_dim,third_hidden_dim,latent_dim,batch_size, epochs, learning_rate, kappa, beta,layer_depth,leaky_alpha,dr_rate):
         self.original_dim = original_dim
@@ -15,16 +18,14 @@ class CVAE():
         self.learning_rate = learning_rate
         self.kappa = kappa
         self.beta = beta
-        #層の深さの変数
         self.layer_depth = layer_depth
         self.leaky_alpha = leaky_alpha
         self.dr_rate = dr_rate
-
+        self.LeakyReLU = from keras.layers.advanced_activations import LeakyReLU
     #これはインスタンスメソッド
     def build_encoder_layer(self):     #trialはoputunaが最適化を行うモジュール
         # Input place holder for RNAseq data with specific input size
-        self.leaky_relu = LeakyReLU(alpha=self.leaky_alpha)
-        global z
+        self.leaky_relu = self.LeakyReLU(alpha=self.leaky_alpha)
         self.rnaseq_input = Input(shape=(self.original_dim, ))
         self.y_label_input = Input(shape=(self.label_dim,))
         # Input layer is compressed into a mean and log variance vector of size `latent_dim`
